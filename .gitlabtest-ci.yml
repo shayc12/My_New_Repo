@@ -6,11 +6,14 @@
 build-job:
   stage: build
   script:
+    - docker build . -t helloimage:v1
     - echo "Hello, $GITLAB_USER_LOGIN!"
 
 test-job1:
   stage: test
   script:
+    - docker run -it helloimage:v1 --name demohello
+    - docker log demohello |grep hello 
     - echo "This job tests something"
 
 test-job2:
@@ -24,4 +27,5 @@ test-job2:
 deploy-prod:
   stage: deploy
   script:
+    docker run -itd helloiamge:v1 --name image_prod
     - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
