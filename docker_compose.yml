@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    ports:
+      - 8000:5000
+    volumes:
+    - type: bind
+      source: /source
+      target: /code
+    - type: volume
+      source: logicalVoloume01
+      target: /var/log
+    networks:
+    - db_layer
+    - app_layer
+  redis:
+    image: redis:alpine
+    volumes:
+    - type: bind
+      source: /source
+      target: /code
+    - type: volume
+      source: logicalVoloume01
+      target: /var/log
+    networks:
+    - db_layer
+    - app_layer
+    depands_on: web
+
+networks: 
+  db_layer:
+  app_layer:
+volumes:
+  logicalVoloume01:
